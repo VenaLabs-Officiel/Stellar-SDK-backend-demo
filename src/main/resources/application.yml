@@ -1,0 +1,18 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: venalabs-backend-sdk-demo
+
+venalabs:
+  # Venalabs API base URL (use localhost for testing against local backend)
+  api-url: https://api.venalabs.com
+  # API Key from Saas dashboard - REPLACE WITH YOUR KEY
+  api-key: <API-KEY>
+  # API Secret from Saas dashboard - REPLACE WITH YOUR SECRET
+  api-secret: <API-SECRET>
+
+logging:
+  level:
+    com.venalabs.demo: DEBUG

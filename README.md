@@ -1,8 +1,8 @@
 # Venalabs Backend SDK
 
-Reference Spring Boot application showing how to generate access tokens for the [Venalabs Stellar SDK](https://venalabs.com).
+Reference Spring Boot application showing how to generate access tokens for the [VenaLabs Stellar SDK](https://github.com/VenaLabs-Officiel/Stellar-SDK) (`@venalabs/stellar-sdk`, version 2.1.0 or later).
 
-Your backend authenticates with the Venalabs API using your API credentials and returns a short-lived token that your frontend uses to initialize the SDK.
+Your backend authenticates with the Venalabs API using your API credentials and returns a user access token (valid for 24 hours) that your frontend passes to the SDK. See the [integration guide](https://github.com/VenaLabs-Officiel/Stellar-SDK/blob/main/docs/integration-guide.md) for the full flow.
 
 ## How It Works
 
@@ -15,9 +15,9 @@ Frontend                     Your Backend                  Venalabs API
    │                              │  X-Api-Key / X-Api-Secret    │
    │                              │ ────────────────────────────► │
    │                              │                              │
-   │                              │  { "token": "eyJ..." }       │
+   │                              │  { "token", "expiresIn" }    │
    │                              │ ◄──────────────────────────── │
-   │  { "accessToken": "eyJ..." } │                              │
+   │  { "token": "eyJ..." }       │                              │
    │ ◄──────────────────────────  │                              │
 ```
 
@@ -32,7 +32,7 @@ Frontend                     Your Backend                  Venalabs API
 
 ### 1. Configure your credentials
 
-Get your API key and secret from the [Venalabs Saas] (https://venalabs.com/en/saas/admin/sdk-integration), then set them as environment variables:
+Get your API key and secret from the [VenaLabs dashboard](https://venalabs.com/en/saas/admin/sdk-integration), then set them as environment variables:
 
 ```bash
 export VENALABS_API_KEY=your-api-key
@@ -65,7 +65,7 @@ Response:
 
 ```json
 {
-  "accessToken": "eyJhbGciOiJIUzI1NiIs..."
+  "token": "eyJhbGciOiJIUzI1NiIs..."
 }
 ```
 
@@ -77,7 +77,7 @@ This demo uses a hardcoded user ID. In a real application, extract the authentic
 @GetMapping("/api/venalabs-token")
 public ResponseEntity<Map<String, String>> getVenalabsToken(@AuthenticationPrincipal User user) {
     String accessToken = venalabsTokenService.getAccessToken(user.getId());
-    return ResponseEntity.ok(Map.of("accessToken", accessToken));
+    return ResponseEntity.ok(Map.of("token", accessToken));
 }
 ```
 
@@ -100,10 +100,14 @@ src/main/java/com/venalabs/demo/
 | Property | Env Variable | Default | Description |
 |---|---|---|---|
 | `venalabs.api-url` | `VENALABS_API_URL` | `https://api.venalabs.com` | Venalabs API base URL |
-| `venalabs.api-key` | `VENALABS_API_KEY` | — | Your API key |
-| `venalabs.api-secret` | `VENALABS_API_SECRET` | — | Your API secret |
+| `venalabs.api-key` | `VENALABS_API_KEY` | - | Your API key |
+| `venalabs.api-secret` | `VENALABS_API_SECRET` | - | Your API secret |
 | `server.port` | `SERVER_PORT` | `8081` | Server port |
+
+## Frontend
+
+The matching React application is [Stellar-SDK-frontend-demo](https://github.com/VenaLabs-Officiel/Stellar-SDK-frontend-demo). It reads `data.token` from this endpoint.
 
 ## License
 
-MIT
+MIT, see [LICENSE](./LICENSE).

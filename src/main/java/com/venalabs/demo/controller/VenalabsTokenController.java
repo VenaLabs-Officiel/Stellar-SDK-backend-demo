@@ -29,6 +29,7 @@ public class VenalabsTokenController {
 
         String accessToken = venalabsTokenService.getAccessToken(userId);
 
-        return ResponseEntity.ok(Map.of("accessToken", accessToken));
+        // Same shape as the VenaLabs API answer: the frontend reads data.token
+        return ResponseEntity.ok(Map.of("token", accessToken));
     }
 }
